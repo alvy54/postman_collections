@@ -1,0 +1,453 @@
+{
+	"info": {
+		"_postman_id": "e4b713cb-7900-4855-8472-2fb14131ea15",
+		"name": "basketball",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9113332"
+	},
+	"item": [
+		{
+			"name": "status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Subscriptio plan is free\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.response.subscription.plan).to.eql(\"Free\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-apisports-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/status",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "teams",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"var teamId = jsonData.response[0].id;",
+							"pm.collectionVariables.set(\"team_id\", teamId);",
+							"",
+							"pm.test(\"test team attributes\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.response[0].name).to.eql(\"Los Angeles Lakers\");",
+							"    pm.expect(jsonData.response[0].country.name).to.eql(\"USA\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-apisports-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/teams?name=Los Angeles Lakers",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"teams"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Los Angeles Lakers"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "leagues",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"var leagueId = jsonData.response[0].id;",
+							"pm.collectionVariables.set(\"league_id\", leagueId);",
+							"",
+							"pm.test(\"Your league attributes\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.response[0].name).to.eql(\"NBA\");",
+							"    pm.expect(jsonData.response[0].country.name).to.eql(\"USA\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-apisports-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/leagues?name=NBA",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"leagues"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "NBA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "statistics",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"test statistics attributes\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.response.country.name).to.eql(\"USA\");",
+							"    pm.expect(jsonData.response.league.name).to.eql(\"NBA\");",
+							"    pm.expect(jsonData.response.league.season).to.eql(\"2023-2024\");",
+							"    pm.expect(jsonData.response.team.name).to.eql(\"Los Angeles Lakers\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-apisports-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/statistics?league={{league_id}}&season={{season}}&team={{team_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"statistics"
+					],
+					"query": [
+						{
+							"key": "league",
+							"value": "{{league_id}}"
+						},
+						{
+							"key": "season",
+							"value": "{{season}}"
+						},
+						{
+							"key": "team",
+							"value": "{{team_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "standings",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"test standings\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.response[0][0].position).to.eql(1);",
+							"    pm.expect(jsonData.response[0][0].group.name).to.eql(\"Western Conference\");",
+							"    pm.expect(jsonData.response[0][0].team.name).to.eql(\"Oklahoma City Thunder\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-apisports-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/standings?league={{league_id}}&season={{season}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"standings"
+					],
+					"query": [
+						{
+							"key": "league",
+							"value": "{{league_id}}"
+						},
+						{
+							"key": "season",
+							"value": "{{season}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "players",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"var playerId = jsonData.response[0].id;",
+							"pm.collectionVariables.set(\"player_id\", playerId);",
+							"",
+							"pm.test(\"test players\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.response[0].name).to.eql(\"James LeBron\");",
+							"    pm.expect(jsonData.response[0].number).to.eql(\"23\");",
+							"    pm.expect(jsonData.response[0].country).to.eql(\"USA\");",
+							"    pm.expect(jsonData.response[0].position).to.eql(\"Forward\");",
+							"    pm.expect(jsonData.response[0].age).to.eql(39);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-apisports-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/players?search=James Lebron",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"players"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "James Lebron"
+						},
+						{
+							"key": "id",
+							"value": "747",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "games/statistics/players",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"test player statistics\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.response[0].player.name).to.eql(\"James LeBron\");",
+							"    pm.expect(jsonData.response[0].type).to.eql(\"starters\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-apisports-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/games/statistics/players?season={{season}}&player={{player_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"games",
+						"statistics",
+						"players"
+					],
+					"query": [
+						{
+							"key": "season",
+							"value": "{{season}}"
+						},
+						{
+							"key": "player",
+							"value": "{{player_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "team_id",
+			"value": ""
+		},
+		{
+			"key": "league_id",
+			"value": ""
+		},
+		{
+			"key": "player_id",
+			"value": ""
+		},
+		{
+			"key": "season",
+			"value": "2023-2024",
+			"type": "string"
+		}
+	]
+}
