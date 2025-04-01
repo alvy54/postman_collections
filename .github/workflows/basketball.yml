@@ -14,6 +14,5 @@ jobs:
     - uses: actions/checkout@master
     - uses: matt-ball/newman-action@master
       with:
-        apiKey: ${{ secrets.postmanApiKey }}
-        collection: 9113332-e4b713cb-7900-4855-8472-2fb14131ea15
-        environment: 9113332-a9854c71-e65a-4f47-bff6-db4988497d63
+        collection: basketball.postman_collection.json
+        environment: production.postman_environment.json
