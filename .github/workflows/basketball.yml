@@ -15,4 +15,5 @@ jobs:
     - uses: matt-ball/newman-action@master
       with:
         collection: basketball.postman_collection.json
-        environment: basketball.postman_environment.json
+        envVar: '[{ "key": "baseUrl", "value": "https://v1.basketball.api-sports.io" },
+                  { "key": "api-key", "value": "${{ secrets.basketballApiKey }}" }]'
